@@ -9,6 +9,14 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
+   element ci_div
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
    element ci_mul
    {
       datum _sortIndex
@@ -192,7 +200,8 @@
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="clk.clk_in_reset" type="reset" dir="end" />
- <module name="ci_mul" kind="ci_mul" version="1.0" enabled="1" />
+ <module name="ci_div" kind="ci_div" version="1.0" enabled="0" />
+ <module name="ci_mul" kind="ci_mul" version="1.0" enabled="0" />
  <module name="clk" kind="clock_source" version="22.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -212,7 +221,7 @@
   <parameter name="cpuArchRev" value="1" />
   <parameter name="cpuID" value="0" />
   <parameter name="cpuReset" value="false" />
-  <parameter name="customInstSlavesSystemInfo"><![CDATA[<info><slave name="ci_mul_0" baseAddress="0" addressSpan="1" clockCycleType="COMBINATORIAL" /></info>]]></parameter>
+  <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
@@ -688,6 +697,7 @@
  <connection kind="clock" version="22.1" start="clk.clk" end="jtag_uart.clk" />
  <connection kind="clock" version="22.1" start="clk.clk" end="main_memory.clk1" />
  <connection kind="clock" version="22.1" start="clk.clk" end="ci_mul.clock" />
+ <connection kind="clock" version="22.1" start="clk.clk" end="ci_div.clock" />
  <connection kind="clock" version="22.1" start="clk.clk" end="pll.inclk_interface" />
  <connection kind="interrupt" version="22.1" start="cpu.irq" end="sys_timer.irq">
   <parameter name="irqNumber" value="0" />
@@ -703,6 +713,15 @@
   <parameter name="CIName" value="ci_mul_0" />
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0" />
+ </connection>
+ <connection
+   kind="nios_custom_instruction"
+   version="22.1"
+   start="cpu.custom_instruction_master"
+   end="ci_div.nios_custom_instruction_slave">
+  <parameter name="CIName" value="ci_div" />
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="2" />
  </connection>
  <connection
    kind="reset"
@@ -721,6 +740,7 @@
    start="clk.clk_reset"
    end="jtag_uart.reset" />
  <connection kind="reset" version="22.1" start="clk.clk_reset" end="ci_mul.reset" />
+ <connection kind="reset" version="22.1" start="clk.clk_reset" end="ci_div.reset" />
  <connection
    kind="reset"
    version="22.1"

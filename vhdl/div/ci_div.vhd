@@ -45,13 +45,8 @@ architecture arch of ci_div is
 	end component;
 	
 	-- signals for the components
-	signal fifo_q, fifo_data : std_logic_vector(31 downto 0);
-	signal dividend, divisor, result_wire : std_logic_vector(31 downto 0);
+	signal fifo_q, fifo_data, dividend, divisor, result_wire : std_logic_vector(31 downto 0);
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic;
-	
-	--signals for the state machine for custom instructions
-	--type State_Type is (IDLE, DIV_WRITE, DIV_READ);
-	--signal State: State_Type := IDLE;
 	
 	-- constant for setting the number of pipeline stages
 	constant STAGES : integer := 48;
@@ -75,12 +70,12 @@ begin
 		 elsif rising_edge(clk) then
 			-- State machine for custom instruction
 			if start = '1' then
-				case n(0)) is
+				case n(0) is
 				  when '0' =>	-- DIV_WRITE
 					 -- Issue dataa and datab to division pipeline
 					 dividend <= dataa;
 					 divisor <= datab;
-					 fifo_wr <= '1'
+					 fifo_wr <= '1';
 					 done <= '1';
 					 --State <= DIV_READ;
 
