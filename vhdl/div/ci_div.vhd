@@ -45,7 +45,7 @@ architecture arch of ci_div is
 	end component;
 
 	signal fifo_q, fifo_data : std_logic_vector(31 downto 0);
-	signal dividend, divisor, result_wire : std_logic_vector(47 downto 0);
+	signal dividend, divisor, result_wire : std_logic_vector(31 downto 0);
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic;
 	constant STAGES : integer := 48;
 	
@@ -54,7 +54,7 @@ begin
 	done <= '0';
 	dividend <= (others => '0');
 	divisor <= (others => '0');
-	result <= result_wire;
+	--result <= result_wire;
 
 	divider : lpm_divide
 	generic map(
