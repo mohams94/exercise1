@@ -2,12 +2,12 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Oct 16, 2023 10:48:35 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1697489315301</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Oct 17, 2023 6:45:45 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1697582745885</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/gettoknow.sopcinfo</SopcDesignFile>
-        <SystemFileHash>9a57dbb19d8a4de328c334a6e96b6c5d7b048c35d268d10391f59f15e651ea9</SystemFileHash>
+        <SystemFileHash>655669863b64c646e623b7db2ff5a0225ae5d010478278ddab8eec8b941dd3f</SystemFileHash>
         <JdiFile>default</JdiFile>
         <Cpu>cpu</Cpu>
         <SchemaVersion>1.9</SchemaVersion>
@@ -900,12 +900,6 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
-                <slaveDescriptor>pll</slaveDescriptor>
-                <addressRange>0x00000000 - 0x0000000F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>main_memory</slaveDescriptor>
                 <addressRange>0x00020000 - 0x0003E847</addressRange>
                 <addressSpan>125000</addressSpan>
@@ -918,8 +912,14 @@
                 <attributes>timer</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>pll</slaveDescriptor>
+                <addressRange>0x00041040 - 0x0004104F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x00041040 - 0x00041047</addressRange>
+                <addressRange>0x00041050 - 0x00041057</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
