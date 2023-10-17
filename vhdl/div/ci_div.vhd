@@ -73,10 +73,12 @@ begin
 				case n(0) is
 				  when '0' =>	-- DIV_WRITE
 					 -- Issue dataa and datab to division pipeline
-					 dividend <= dataa;
-					 divisor <= datab;
-					 fifo_wr <= '1';
-					 done <= '1';
+					 if fifo_full = '0' then
+					 	 dividend <= dataa;
+						 divisor <= datab;
+						 fifo_wr <= '1';
+						 done <= '1';
+					 end if;
 					 --State <= DIV_READ;
 
 				  when '1' =>	-- DIV_READ
@@ -85,9 +87,9 @@ begin
 						done <= '0';
 					 else
 						-- Read result from FIFO
-						fifo_rd <= '1';
 						result <= fifo_data;
 						done <= '1';
+						fifo_rd <= '1';
 						--State <= IDLE;
 					 end if;
 
@@ -130,7 +132,7 @@ begin
 	port map(
 		aclr => reset,
 		clock => clk,
-		data => result_wire(31 downto 0),
+		data => result_wire,
 		rdreq => fifo_rd,
 		wrreq => fifo_wr,
 		empty => fifo_empty,
