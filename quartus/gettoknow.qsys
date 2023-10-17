@@ -9,6 +9,14 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
+   element avalon_mm_sqrt
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+   }
    element ci_div
    {
       datum _sortIndex
@@ -133,7 +141,7 @@
    {
       datum baseAddress
       {
-         value = "266304";
+         value = "266320";
          type = "String";
       }
    }
@@ -159,6 +167,14 @@
       {
          value = "6";
          type = "int";
+      }
+   }
+   element pll.pll_slave
+   {
+      datum baseAddress
+      {
+         value = "266304";
+         type = "String";
       }
    }
    element sys_timer
@@ -200,6 +216,7 @@
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="clk.clk_in_reset" type="reset" dir="end" />
+ <module name="avalon_mm_sqrt" kind="avalon_mm_sqrt" version="1.0" enabled="0" />
  <module name="ci_div" kind="ci_div" version="1.0" enabled="0" />
  <module name="ci_mul" kind="ci_mul" version="1.0" enabled="0" />
  <module name="clk" kind="clock_source" version="22.1" enabled="1">
@@ -228,7 +245,7 @@
   <parameter name="dataAddrWidth" value="19" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='pll.pll_slave' start='0x0' end='0x10' type='altpll.pll_slave' /><slave name='main_memory.s1' start='0x20000' end='0x3E848' type='altera_avalon_onchip_memory2.s1' /><slave name='cpu.debug_mem_slave' start='0x40800' end='0x41000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='sys_timer.s1' start='0x41020' end='0x41040' type='altera_avalon_timer.s1' /><slave name='jtag_uart.avalon_jtag_slave' start='0x41040' end='0x41048' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='main_memory.s1' start='0x20000' end='0x3E848' type='altera_avalon_onchip_memory2.s1' /><slave name='cpu.debug_mem_slave' start='0x40800' end='0x41000' type='altera_nios2_gen2.debug_mem_slave' /><slave name='sys_timer.s1' start='0x41020' end='0x41040' type='altera_avalon_timer.s1' /><slave name='pll.pll_slave' start='0x41040' end='0x41050' type='altpll.pll_slave' /><slave name='jtag_uart.avalon_jtag_slave' start='0x41050' end='0x41058' type='altera_avalon_jtag_uart.avalon_jtag_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -626,7 +643,16 @@
    start="cpu.data_master"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00041040" />
+  <parameter name="baseAddress" value="0x00041050" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="22.1"
+   start="cpu.data_master"
+   end="avalon_mm_sqrt.avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -644,7 +670,7 @@
    start="cpu.data_master"
    end="pll.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x00041040" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -698,6 +724,11 @@
  <connection kind="clock" version="22.1" start="clk.clk" end="main_memory.clk1" />
  <connection kind="clock" version="22.1" start="clk.clk" end="ci_mul.clock" />
  <connection kind="clock" version="22.1" start="clk.clk" end="ci_div.clock" />
+ <connection
+   kind="clock"
+   version="22.1"
+   start="clk.clk"
+   end="avalon_mm_sqrt.clock" />
  <connection kind="clock" version="22.1" start="clk.clk" end="pll.inclk_interface" />
  <connection kind="interrupt" version="22.1" start="cpu.irq" end="sys_timer.irq">
   <parameter name="irqNumber" value="0" />
@@ -741,6 +772,11 @@
    end="jtag_uart.reset" />
  <connection kind="reset" version="22.1" start="clk.clk_reset" end="ci_mul.reset" />
  <connection kind="reset" version="22.1" start="clk.clk_reset" end="ci_div.reset" />
+ <connection
+   kind="reset"
+   version="22.1"
+   start="clk.clk_reset"
+   end="avalon_mm_sqrt.reset" />
  <connection
    kind="reset"
    version="22.1"

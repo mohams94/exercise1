@@ -123,10 +123,9 @@ begin
 		remain => open
 	);
 
-		fifo : alt_fwft_fifo
+	fifo : alt_fwft_fifo
 	generic map(DATA_WIDTH => 32,
-		lpm_showahead => "ON",
-		lpm_type => "scfifo",
+
 		NUM_ELEMENTS => 128)
 
 	port map(
