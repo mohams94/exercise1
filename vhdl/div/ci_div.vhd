@@ -44,12 +44,14 @@ architecture arch of ci_div is
 			);
 	end component;
 	
+		-- constant for setting the number of pipeline stages
+	constant STAGES : integer := 48;
+	
 	-- signals for the components
-	signal fifo_q, fifo_data, dividend, divisor, result_wire : std_logic_vector(31 downto 0);
+	signal fifo_q, fifo_data, dividend, divisor : std_logic_vector(31 downto 0);
+	signal result_wire : std_logic_vector(STAGES-1 downto 0);
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic;
 	
-	-- constant for setting the number of pipeline stages
-	constant STAGES : integer := 48;
 	
 begin
 	--result <= result_wire;
@@ -87,7 +89,7 @@ begin
 						done <= '0';
 					 else
 						-- Read result from FIFO
-						result <= fifo_data;
+						result <= fifo_q;
 						done <= '1';
 						fifo_rd <= '1';
 						--State <= IDLE;
@@ -108,8 +110,8 @@ begin
 
 	divider : lpm_divide
 	generic map(
-		LPM_WIDTHN => STAGES,
-		LPM_WIDTHD => STAGES,
+		LPM_WIDTHN => 48,
+		LPM_WIDTHD => 48,
 		LPM_PIPELINE => STAGES,
 		LPM_DREPRESENTATION => "SIGNED",
 		LPM_NREPRESENTATION => "SIGNED")
@@ -117,8 +119,8 @@ begin
 	port map(
 		clock => clk,
 		clken => '1',
-		numer => dividend,
-		denom => divisor,
+		numer => x"0000" & dividend,
+		denom => x"0000" & divisor,
 		quotient => result_wire,
 		remain => open
 	);
@@ -131,7 +133,7 @@ begin
 	port map(
 		aclr => reset,
 		clock => clk,
-		data => result_wire,
+		data => result_wire(31 downto 0),
 		rdreq => fifo_rd,
 		wrreq => fifo_wr,
 		empty => fifo_empty,
