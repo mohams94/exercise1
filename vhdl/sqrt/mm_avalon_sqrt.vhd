@@ -68,13 +68,12 @@ begin
 			fifo_wr <= '0';
 			read_flag <= '0';
 		 elsif rising_edge(clk) then
-            if write = '1' then
-					if address(0) = '0' then
-						sqrt_input <= writedata;
-					end if;
-                -- Write a new value to the module
-                -- Implement your FIFO write logic here
-            end if;
+            if write = '1' and address(0) = '0' then
+					fifo_wr <= '1';
+					sqrt_input <= writedata;
+            else
+					fifo_wr <= '0';
+				end if;
             
             if read = '1' then
                 -- Read the result, if data is available
@@ -82,25 +81,21 @@ begin
                     --sqrt_result <= (others => 'X');  -- Undefined result
 						  read_flag <= '1';
                 else
-                    --sqrt_result <= -- Implement your FIFO read logic here
+                    --sqrt_result <= 
                 end if;
             end if;
 				
-				if read_flag = '1' then
-					readdata <= sqrt_result;
+				if read = '1' and read_flag = '1' and address(0) = '1' then
+					--readdata <= sqrt_result;
+					fifo_rd <= '1';
 					read_flag <= '0';
+				else
+					fifo_rd <= '0';
             end if;
-            -- Determine if data is available to be read from the core
-            --data_available <= -- Implement your FIFO empty flag logic here
         end if;
     end process;
 
-    -- Connect ALTSQRT IP core to your design
-    -- Instantiate and connect the ALTSQRT IP core here
-
-    -- Output data based on the read address
-    readdata <= sqrt_result when read = '1' else (others => 'X');
-	 
+    readdata <= fifo_q when fifo_empty = '0' else (others => 'X');
 	 
 	sqrt: altsqrt
 	generic map(
