@@ -47,6 +47,9 @@ architecture rtl of avalon_mm_sqrt is
 	signal fifo_q, fifo_data, sqrt_result, sqrt_input, sqrt_remainder : std_logic_vector(31 downto 0);
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic;
 	
+	-- flag for second read cycle
+	signal read_flag : std_logic;
+	
 	-- constant for setting the number of pipeline stages
 	constant STAGES : integer := 16;
 
@@ -63,6 +66,7 @@ begin
 			fifo_full <= '0';
 			fifo_rd <= '0';
 			fifo_wr <= '0';
+			read_flag <= '0';
 		 elsif rising_edge(clk) then
             if write = '1' then
 					if address(0) = '0' then
@@ -75,12 +79,17 @@ begin
             if read = '1' then
                 -- Read the result, if data is available
                 if fifo_empty = '0' and address(0) = '0' then
-                    sqrt_result <= (others => 'X');  -- Undefined result
+                    --sqrt_result <= (others => 'X');  -- Undefined result
+						  read_flag <= '1';
                 else
                     --sqrt_result <= -- Implement your FIFO read logic here
                 end if;
             end if;
-            
+				
+				if read_flag = '1' then
+					readdata <= sqrt_result;
+					read_flag <= '0';
+            end if;
             -- Determine if data is available to be read from the core
             --data_available <= -- Implement your FIFO empty flag logic here
         end if;

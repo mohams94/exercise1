@@ -1,8 +1,8 @@
 
 module gettoknow (
-	clk_clk,
-	reset_reset_n);	
+	reset_reset_n,
+	clk_clk);	
 
-	input		clk_clk;
 	input		reset_reset_n;
+	input		clk_clk;
 endmodule
