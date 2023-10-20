@@ -10,7 +10,7 @@ LIBRARY altera_mf;
 USE altera_mf.altera_mf_components.all;
 
 entity avalon_mm_sqrt is
-	port (
+	port ( 
 		clk   : in std_logic;
 		res_n : in std_logic;
 		
