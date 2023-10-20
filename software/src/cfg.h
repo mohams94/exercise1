@@ -12,7 +12,7 @@
 
 
 //uncomment the following line to enable the software normalization function on the NIOS II
-//#define USE_SOFTWARE_IMPLEMENTATION
+#define USE_SOFTWARE_IMPLEMENTATION
 
 #define MUL 0
 #define DIV 1
