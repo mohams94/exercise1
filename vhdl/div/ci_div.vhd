@@ -48,8 +48,7 @@ architecture arch of ci_div is
 	constant STAGES : integer := 48;
 	
 	-- signals for the components
-	signal fifo_q, fifo_data, dividend, divisor : std_logic_vector(31 downto 0) := (others => '0');
-	signal result_wire : std_logic_vector(STAGES-1 downto 0) := (others => '0');
+	signal fifo_q, fifo_data, result_wire, dividend, divisor : std_logic_vector(STAGES-1 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	
 	
@@ -73,32 +72,27 @@ begin
 				--fifo_wr <= '0';
 			else
 				if start = '1' then
-					case n(0) is
-					  when '0' =>	-- DIV_WRITE
-						 -- Issue dataa and datab to division pipeline
+					if n(0) = '0' then
+						-- Issue dataa and datab to division pipeline
 						 if fifo_full = '0' then
-							 dividend <= dataa;
-							 divisor <= datab;
+							 dividend <= x"0000" & dataa;
+							 divisor <= x"0000" & datab;
+							 result <= fifo_q(15 downto 0) & x"0000";
 							 fifo_wr <= '1';
 							 done <= '1';
 						 end if;
-						 --State <= DIV_READ;
-
-					  when '1' =>	-- DIV_READ
-						 if fifo_empty = '1' then
+						else
+							if fifo_empty = '1' then
 							-- Wait for result in the FIFO
 							done <= '0';
 						 else
 							-- Read result from FIFO
-							result <= fifo_q;
+							result <= fifo_q(16 downto 0) & x"0000";
 							done <= '1';
 							fifo_rd <= '1';
 							--State <= IDLE;
 						 end if;
-
-					  when others =>
-						 --State <= IDLE;
-					end case;
+					end if;
 				else
 					done <= '0';
 				end if;
@@ -106,14 +100,17 @@ begin
 				if fifo_wr ='1' then
 					fifo_wr <= '0';
 				end if;
+				if fifo_rd ='1' then
+					fifo_rd <= '0';
+				end if;
 			end if;
 		 end if;
 	  end process;
 
 	divider : lpm_divide
 	generic map(
-		LPM_WIDTHN => 32,
-		LPM_WIDTHD => 32,
+		LPM_WIDTHN => 48,
+		LPM_WIDTHD => 48,
 		LPM_PIPELINE => STAGES,
 		LPM_DREPRESENTATION => "SIGNED",
 		LPM_NREPRESENTATION => "SIGNED")
@@ -123,7 +120,7 @@ begin
 		clken => '1',
 		numer => dividend,
 		denom => divisor,
-		quotient => result_wire(31 downto 0),
+		quotient => result_wire,
 		remain => open
 	);
 

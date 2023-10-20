@@ -58,15 +58,21 @@ begin
 	stimulus : process
 	begin
 		reset <= '1';
-		wait until rising_edge(clk);
-		start <= '0';
+		wait for 100 ns;
+		start <= '1';
 		dataa <= (others=>'1');
 		datab <= (others=>'1');
 		n(0) <= '0';
 		wait until rising_edge(clk);
+		dataa <= (others=>'0');
+		datab <= (others=>'1');
+		wait until rising_edge(clk);
+		dataa <= x"12345678";
+		datab <= x"12345678";
+		--wait until rising_edge(clk);
+		--n(0) <= '1';
 		
-		
-		--wait for 100 ns;
+		wait for 100 ns;
 
 		wait;
 	end process;
