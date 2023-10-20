@@ -48,9 +48,9 @@ architecture arch of ci_div is
 	constant STAGES : integer := 48;
 	
 	-- signals for the components
-	signal fifo_q, fifo_data, dividend, divisor : std_logic_vector(31 downto 0);
-	signal result_wire : std_logic_vector(STAGES-1 downto 0);
-	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic;
+	signal fifo_q, fifo_data, dividend, divisor : std_logic_vector(31 downto 0) := (others => '0');
+	signal result_wire : std_logic_vector(STAGES-1 downto 0) := (others => '0');
+	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	
 	
 begin
@@ -58,60 +58,62 @@ begin
 
 	  process(clk)
 	  begin
-		if reset = '0' then
-			done <= '0';
-			dividend <= (others => '0');
-			divisor <= (others => '0');
-			fifo_data <= (others => '0');
-			fifo_q <= (others => '0');
-			result_wire <= (others => '0');
-			fifo_empty <= '0';
-			fifo_full <= '0';
-			fifo_rd <= '0';
-			fifo_wr <= '0';
-		 elsif rising_edge(clk) then
+		 if rising_edge(clk) then
 			-- State machine for custom instruction
-			if start = '1' then
-				case n(0) is
-				  when '0' =>	-- DIV_WRITE
-					 -- Issue dataa and datab to division pipeline
-					 if fifo_full = '0' then
-					 	 dividend <= dataa;
-						 divisor <= datab;
-						 fifo_wr <= '1';
-						 done <= '1';
-					 end if;
-					 --State <= DIV_READ;
-
-				  when '1' =>	-- DIV_READ
-					 if fifo_empty = '1' then
-						-- Wait for result in the FIFO
-						done <= '0';
-					 else
-						-- Read result from FIFO
-						result <= fifo_q;
-						done <= '1';
-						fifo_rd <= '1';
-						--State <= IDLE;
-					 end if;
-
-				  when others =>
-					 --State <= IDLE;
-				end case;
+			if reset = '0' then
+				--done <= '0';
+				--dividend <= (others => '0');
+				--divisor <= (others => '0');
+				--fifo_data <= (others => '0');
+				--fifo_q <= (others => '0');
+				--result_wire <= (others => '0');
+				--fifo_empty <= '0';
+				--fifo_full <= '0';
+				--fifo_rd <= '0';
+				--fifo_wr <= '0';
 			else
-				done <= '0';
-			end if;
-			-- stop writing after one cycle
-			if fifo_wr ='1' then
-				fifo_wr <= '0';
+				if start = '1' then
+					case n(0) is
+					  when '0' =>	-- DIV_WRITE
+						 -- Issue dataa and datab to division pipeline
+						 if fifo_full = '0' then
+							 dividend <= dataa;
+							 divisor <= datab;
+							 fifo_wr <= '1';
+							 done <= '1';
+						 end if;
+						 --State <= DIV_READ;
+
+					  when '1' =>	-- DIV_READ
+						 if fifo_empty = '1' then
+							-- Wait for result in the FIFO
+							done <= '0';
+						 else
+							-- Read result from FIFO
+							result <= fifo_q;
+							done <= '1';
+							fifo_rd <= '1';
+							--State <= IDLE;
+						 end if;
+
+					  when others =>
+						 --State <= IDLE;
+					end case;
+				else
+					done <= '0';
+				end if;
+				-- stop writing after one cycle
+				if fifo_wr ='1' then
+					fifo_wr <= '0';
+				end if;
 			end if;
 		 end if;
 	  end process;
 
 	divider : lpm_divide
 	generic map(
-		LPM_WIDTHN => 48,
-		LPM_WIDTHD => 48,
+		LPM_WIDTHN => 32,
+		LPM_WIDTHD => 32,
 		LPM_PIPELINE => STAGES,
 		LPM_DREPRESENTATION => "SIGNED",
 		LPM_NREPRESENTATION => "SIGNED")
@@ -119,9 +121,9 @@ begin
 	port map(
 		clock => clk,
 		clken => '1',
-		numer => x"0000" & dividend,
-		denom => x"0000" & divisor,
-		quotient => result_wire,
+		numer => dividend,
+		denom => divisor,
+		quotient => result_wire(31 downto 0),
 		remain => open
 	);
 
@@ -142,4 +144,3 @@ begin
 	);
 
 end architecture;
-
