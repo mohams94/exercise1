@@ -44,8 +44,8 @@ architecture rtl of avalon_mm_sqrt is
 	end component;
 	
 	-- signals for the components
-	signal fifo_q, fifo_data, sqrt_result, sqrt_input, sqrt_remainder : std_logic_vector(31 downto 0);
-	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic;
+	signal fifo_q, fifo_data, sqrt_result, sqrt_input, sqrt_remainder : std_logic_vector(31 downto 0) := (others => '0');
+	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	
 	-- flag for second read cycle
 	signal read_flag : std_logic;
@@ -57,16 +57,16 @@ begin
     process (clk)
     begin
        if res_n = '0' then
-			fifo_data <= (others => '0');
-			fifo_q <= (others => '0');
-			sqrt_result <= (others => '0');
-			sqrt_input <= (others => '0');
-			sqrt_remainder <= (others => '0');
-			fifo_empty <= '0';
-			fifo_full <= '0';
-			fifo_rd <= '0';
-			fifo_wr <= '0';
-			read_flag <= '0';
+--			fifo_data <= (others => '0');
+--			fifo_q <= (others => '0');
+--			sqrt_result <= (others => '0');
+--			sqrt_input <= (others => '0');
+--			sqrt_remainder <= (others => '0');
+--			fifo_empty <= '0';
+--			fifo_full <= '0';
+--			fifo_rd <= '0';
+--			fifo_wr <= '0';
+--			read_flag <= '0';
 		 elsif rising_edge(clk) then
             if write = '1' and address(0) = '0' then
 					fifo_wr <= '1';
@@ -100,14 +100,15 @@ begin
 	sqrt: altsqrt
 	generic map(
 		pipeline => STAGES,
-		width => 32
+		width => 32,
+		Q_PORT_WIDTH => 32
 	)
 	port map(
 		aclr => res_n,
 		clk => clk,
 		q => sqrt_result,
 		radical => sqrt_input,
-		remainder => sqrt_remainder
+		remainder => open
 	);
 	
 	fifo : alt_fwft_fifo
