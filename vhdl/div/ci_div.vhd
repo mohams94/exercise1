@@ -48,8 +48,9 @@ architecture arch of ci_div is
 	constant STAGES : integer := 48;
 	
 	-- signals for the components
-	signal fifo_q, fifo_data, result_wire, dividend, divisor : std_logic_vector(STAGES-1 downto 0) := (others => '0');
+	signal fifo_data, result_wire, dividend, divisor : std_logic_vector(STAGES-1 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
+	signal fifo_q : std_logic_vector(31 downto 0) := (others => '0');
 	
 	
 begin
@@ -77,7 +78,7 @@ begin
 						 if fifo_full = '0' then
 							 dividend <= x"0000" & dataa;
 							 divisor <= x"0000" & datab;
-							 result <= fifo_q(15 downto 0) & x"0000";
+							 result <= fifo_q;
 							 fifo_wr <= '1';
 							 done <= '1';
 						 end if;
@@ -87,7 +88,7 @@ begin
 							done <= '0';
 						 else
 							-- Read result from FIFO
-							result <= fifo_q(16 downto 0) & x"0000";
+							result <= fifo_q;
 							done <= '1';
 							fifo_rd <= '1';
 							--State <= IDLE;

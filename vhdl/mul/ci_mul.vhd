@@ -28,7 +28,7 @@ begin
 		generic map(LPM_WIDTHA => 32, LPM_WIDTHB => 32, LPM_WIDTHP => 64, LPM_PIPELINE => 1)
 			port map(
 						clock => clk,
-						clken => clk_en,
+						clken => '1',
 						dataa => dataa,
 						datab => datab,
 						result => result_wire,

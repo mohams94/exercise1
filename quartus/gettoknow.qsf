@@ -617,6 +617,7 @@ set_global_assignment -name SEARCH_PATH ./qsyscores
 
 
 
+set_global_assignment -name VHDL_FILE ../vhdl/mul/ci_mul_tb.vhd
 set_global_assignment -name VHDL_FILE ../vhdl/sqrt/mm_avalon_sqrt.vhd
 set_global_assignment -name VHDL_FILE ../vhdl/math/math_pkg.vhd
 set_global_assignment -name VHDL_FILE ../vhdl/fifo/alt_fwft_fifo.vhd
