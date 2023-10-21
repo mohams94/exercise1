@@ -22,18 +22,18 @@ end entity;
 
 architecture arch of ci_mul is 
 	-- result of 32x32 bit multiplication has a width of 64 bits
-	signal result_wire : std_logic_vector(63 downto 0);
+	signal result_wire : std_logic_vector(63 downto 0) := (others => '1');
 begin
 	u1: lpm_mult
 		generic map(LPM_WIDTHA => 32, LPM_WIDTHB => 32, LPM_WIDTHP => 64, LPM_PIPELINE => 1)
 			port map(
 						clock => clk,
-						clken => '1',
+						clken => clk_en,
 						dataa => dataa,
 						datab => datab,
 						result => result_wire,
 						sum => (others => '0'));
 
-		result <= result_wire(47 downto 16);
+		result <= result_wire(31 downto 0);
 end architecture;
 

@@ -50,7 +50,7 @@ void v3norm(fix16_t* values, uint32_t count)
 	
 	//alt_printf("%d", values[93]);
 	
-	values[93] = ALT_CI_CI_MUL(values[93], values[93]);
+	values[93] = ALT_CI_CI_MUL(1, 5);
 	values[94] = ALT_CI_CI_MUL(values[94], values[94]);
 	values[95] = ALT_CI_CI_MUL(values[95], values[95]);
 	//values[94] = 0xFFFFFFFF * 0x12345678;
