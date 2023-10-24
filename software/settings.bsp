@@ -2,12 +2,12 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Oct 21, 2023 7:12:55 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1697908375903</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Oct 24, 2023 9:26:52 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1698175612471</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>bsp/</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../quartus/gettoknow.sopcinfo</SopcDesignFile>
-        <SystemFileHash>eb64c8512c6d9329039874e275fb67180d801bc2c2f39341f5dcc944a83236</SystemFileHash>
+        <SystemFileHash>baab1015c91f2128381f3154d2f78cedd73fba19fe42c69ed92d71dae6d34f5c</SystemFileHash>
         <JdiFile>default</JdiFile>
         <Cpu>cpu</Cpu>
         <SchemaVersion>1.9</SchemaVersion>
