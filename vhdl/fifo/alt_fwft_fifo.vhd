@@ -33,30 +33,30 @@ ARCHITECTURE SYN OF alt_fwft_fifo IS
 	SIGNAL sub_wire0	: STD_LOGIC ;
 	SIGNAL sub_wire1	: STD_LOGIC ;
 
---	COMPONENT scfifo
---	GENERIC (
---		add_ram_output_register		: STRING;
---		intended_device_family		: STRING;
---		lpm_numwords		: NATURAL;
---		lpm_showahead		: STRING;
---		lpm_type		: STRING;
---		lpm_width		: NATURAL;
---		lpm_widthu		: NATURAL;
---		overflow_checking		: STRING;
---		underflow_checking		: STRING;
---		use_eab		: STRING
---	);
---	PORT (
---			aclr	: IN STD_LOGIC ;
---			clock	: IN STD_LOGIC ;
---			data	: IN STD_LOGIC_VECTOR (lpm_width-1 DOWNTO 0);
---			rdreq	: IN STD_LOGIC ;
---			wrreq	: IN STD_LOGIC ;
---			empty	: OUT STD_LOGIC ;
---			full	: OUT STD_LOGIC ;
---			q	: OUT STD_LOGIC_VECTOR (lpm_width-1 DOWNTO 0)
---	);
---	END COMPONENT;
+	COMPONENT scfifo
+	GENERIC (
+		add_ram_output_register		: STRING;
+		intended_device_family		: STRING;
+		lpm_numwords		: NATURAL;
+		lpm_showahead		: STRING;
+		lpm_type		: STRING;
+		lpm_width		: NATURAL;
+		lpm_widthu		: NATURAL;
+		overflow_checking		: STRING;
+		underflow_checking		: STRING;
+		use_eab		: STRING
+	);
+	PORT (
+			aclr	: IN STD_LOGIC ;
+			clock	: IN STD_LOGIC ;
+			data	: IN STD_LOGIC_VECTOR (lpm_width-1 DOWNTO 0);
+			rdreq	: IN STD_LOGIC ;
+			wrreq	: IN STD_LOGIC ;
+			empty	: OUT STD_LOGIC ;
+			full	: OUT STD_LOGIC ;
+			q	: OUT STD_LOGIC_VECTOR (lpm_width-1 DOWNTO 0)
+	);
+	END COMPONENT;
 
 BEGIN
 	empty    <= sub_wire0;

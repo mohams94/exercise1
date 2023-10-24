@@ -113,7 +113,7 @@ void check_speed()
 void run()
 {
 	
-	alt_printf("#### %x ####" , ALT_CI_CI_MUL(1, 5));
+	//alt_printf("#### %x ####" , ALT_CI_CI_MUL(1, 5));
 	
 	char line_buffer[16];
 

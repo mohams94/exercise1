@@ -270,7 +270,7 @@
   <parameter name="cpuArchRev" value="1" />
   <parameter name="cpuID" value="0" />
   <parameter name="cpuReset" value="false" />
-  <parameter name="customInstSlavesSystemInfo"><![CDATA[<info><slave name="ci_div" baseAddress="2" addressSpan="2" clockCycleType="COMBINATORIAL" /><slave name="ci_mul" baseAddress="0" addressSpan="1" clockCycleType="MULTICYCLE" /></info>]]></parameter>
+  <parameter name="customInstSlavesSystemInfo"><![CDATA[<info><slave name="ci_div" baseAddress="2" addressSpan="2" clockCycleType="VARIABLE" /><slave name="ci_mul" baseAddress="0" addressSpan="1" clockCycleType="MULTICYCLE" /></info>]]></parameter>
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
@@ -754,7 +754,6 @@
  <connection kind="clock" version="22.1" start="pll.c0" end="cpu.clk" />
  <connection kind="clock" version="22.1" start="pll.c0" end="sys_timer.clk" />
  <connection kind="clock" version="22.1" start="pll.c0" end="main_memory.clk1" />
- <connection kind="clock" version="22.1" start="pll.c0" end="ci_div.clock" />
  <connection kind="clock" version="22.1" start="pll.c0" end="avalon_mm_sqrt.clock" />
  <connection kind="clock" version="22.1" start="clk.clk" end="pll.inclk_interface" />
  <connection kind="interrupt" version="22.1" start="cpu.irq" end="sys_timer.irq">
@@ -797,7 +796,6 @@
    version="22.1"
    start="clk.clk_reset"
    end="jtag_uart.reset" />
- <connection kind="reset" version="22.1" start="clk.clk_reset" end="ci_div.reset" />
  <connection
    kind="reset"
    version="22.1"
