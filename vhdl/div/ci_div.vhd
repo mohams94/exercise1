@@ -79,11 +79,13 @@ begin
 						next_state_0 <= STALL;
 					when STALL =>
 						if counter = STAGES then	-- state machine delayed by 2 clock cycles
-							done <= '1';
-							fifo_wr <= '1';
-							fifo_data <= result_wire;
-							result <= result_wire;
-							next_state_0 <= IDLE;
+							if fifo_full = '0' then
+								done <= '1';
+								fifo_wr <= '1';
+								fifo_data <= result_wire;
+								result <= result_wire;
+								next_state_0 <= IDLE;
+							end if;
 						else
 							counter <= counter + 1;
 							next_state_0 <= STALL;
@@ -115,56 +117,6 @@ begin
 						next_state_1 <= SLEEP;
 				end case;
 			end if;
-				
-			
---			if reset = '0' then
-				--done <= '0';
-				--dividend <= (others => '0');
-				--divisor <= (others => '0');
-				--fifo_data <= (others => '0');
-				--fifo_q <= (others => '0');
-				--result_wire <= (others => '0');
-				--fifo_empty <= '0';
-				--fifo_full <= '0';
-				--fifo_rd <= '0';
-				--fifo_wr <= '0';
---			else
---				if start = '1' then
---					if n(0) = '0' then
---						-- Issue dataa and datab to division pipeline
---						 if fifo_full = '0' then
---							 dividend <= x"0000" & dataa;
---							 divisor <= x"0000" & datab;
---							 result <= fifo_q;
---							 fifo_wr <= '1';
---							 done <= '1';
---						 end if;
---						else
---							if fifo_empty = '1' then
---							-- Wait for result in the FIFO
---							done <= '0';
---						 else
---							-- Read result from FIFO
---							result <= fifo_q;
---							done <= '1';
---							fifo_rd <= '1';
---							--State <= IDLE;
---						 end if;
---					end if;
---				else
---					done <= '0';
---				end if;
---				-- stop writing after one cycle
---				if fifo_wr ='1' then
---					fifo_wr <= '0';
---					done <= '1';
---				end if;
---				if fifo_rd ='1' then
---					fifo_rd <= '0';
---					done <= '1';
---				end if;
---				
---			end if;
 		 end if;
 	  end process;
 
