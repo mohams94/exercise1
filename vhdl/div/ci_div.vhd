@@ -48,19 +48,76 @@ architecture arch of ci_div is
 	constant STAGES : integer := 48;
 	
 	-- signals for the components
-	signal fifo_data, result_wire, dividend, divisor : std_logic_vector(STAGES-1 downto 0) := (others => '0');
+	signal fifo_data, result_wire, dividend, divisor : std_logic_vector(31 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	signal fifo_q : std_logic_vector(31 downto 0) := (others => '0');
+	
+	type State_Type_0 is (IDLE, STALL);
+	type State_Type_1 is (IDLE, DIV_READ, SLEEP);
+	signal state_0, next_state_0 : State_Type_0 := IDLE;
+	signal state_1, next_state_1 : State_Type_1 := SLEEP;
+   signal counter : Integer := 0;
 	
 	
 begin
 	--result <= result_wire;
-
 	  process(clk)
 	  begin
 		 if rising_edge(clk) then
-			-- State machine for custom instruction
-			if reset = '0' then
+		-- ################# div_write
+			if n(0) = '0' then
+			state_0 <= next_state_0;
+				case state_0 is
+					when IDLE =>
+						done <= '0';
+						fifo_wr <= '0';
+						if start = '1' then
+							dividend <= dataa;
+							divisor <= datab;
+						end if;
+						counter <= 0;
+						next_state_0 <= STALL;
+					when STALL =>
+						if counter = STAGES then	-- state machine delayed by 2 clock cycles
+							done <= '1';
+							fifo_wr <= '1';
+							fifo_data <= result_wire;
+							result <= result_wire;
+							next_state_0 <= IDLE;
+						else
+							counter <= counter + 1;
+							next_state_0 <= STALL;
+						end if;
+					when others =>
+						next_state_0 <= IDLE;
+				end case;
+			-- #################   div_read
+			else	
+			state_1 <= next_state_1;
+				case state_1 is
+					when SLEEP =>
+						if start = '1' then
+							next_state_1 <= IDLE;
+						end if;
+					when IDLE =>
+						fifo_rd <= '0';
+						if fifo_empty = '0' then
+							next_state_1 <= DIV_READ;
+						else
+							next_state_1 <= IDLE;
+						end if;
+					when DIV_READ =>
+						fifo_rd <= '1';
+						result <= fifo_q;
+						next_state_1 <= SLEEP;
+						done <= '1';
+					when others =>
+						next_state_1 <= SLEEP;
+				end case;
+			end if;
+				
+			
+--			if reset = '0' then
 				--done <= '0';
 				--dividend <= (others => '0');
 				--divisor <= (others => '0');
@@ -71,47 +128,50 @@ begin
 				--fifo_full <= '0';
 				--fifo_rd <= '0';
 				--fifo_wr <= '0';
-			else
-				if start = '1' then
-					if n(0) = '0' then
-						-- Issue dataa and datab to division pipeline
-						 if fifo_full = '0' then
-							 dividend <= x"0000" & dataa;
-							 divisor <= x"0000" & datab;
-							 result <= fifo_q;
-							 fifo_wr <= '1';
-							 done <= '1';
-						 end if;
-						else
-							if fifo_empty = '1' then
-							-- Wait for result in the FIFO
-							done <= '0';
-						 else
-							-- Read result from FIFO
-							result <= fifo_q;
-							done <= '1';
-							fifo_rd <= '1';
-							--State <= IDLE;
-						 end if;
-					end if;
-				else
-					done <= '0';
-				end if;
-				-- stop writing after one cycle
-				if fifo_wr ='1' then
-					fifo_wr <= '0';
-				end if;
-				if fifo_rd ='1' then
-					fifo_rd <= '0';
-				end if;
-			end if;
+--			else
+--				if start = '1' then
+--					if n(0) = '0' then
+--						-- Issue dataa and datab to division pipeline
+--						 if fifo_full = '0' then
+--							 dividend <= x"0000" & dataa;
+--							 divisor <= x"0000" & datab;
+--							 result <= fifo_q;
+--							 fifo_wr <= '1';
+--							 done <= '1';
+--						 end if;
+--						else
+--							if fifo_empty = '1' then
+--							-- Wait for result in the FIFO
+--							done <= '0';
+--						 else
+--							-- Read result from FIFO
+--							result <= fifo_q;
+--							done <= '1';
+--							fifo_rd <= '1';
+--							--State <= IDLE;
+--						 end if;
+--					end if;
+--				else
+--					done <= '0';
+--				end if;
+--				-- stop writing after one cycle
+--				if fifo_wr ='1' then
+--					fifo_wr <= '0';
+--					done <= '1';
+--				end if;
+--				if fifo_rd ='1' then
+--					fifo_rd <= '0';
+--					done <= '1';
+--				end if;
+--				
+--			end if;
 		 end if;
 	  end process;
 
 	divider : lpm_divide
 	generic map(
-		LPM_WIDTHN => 48,
-		LPM_WIDTHD => 48,
+		LPM_WIDTHN => 32,
+		LPM_WIDTHD => 32,
 		LPM_PIPELINE => STAGES,
 		LPM_DREPRESENTATION => "SIGNED",
 		LPM_NREPRESENTATION => "SIGNED")
@@ -133,7 +193,7 @@ begin
 	port map(
 		aclr => reset,
 		clock => clk,
-		data => result_wire(31 downto 0),
+		data => fifo_data,
 		rdreq => fifo_rd,
 		wrreq => fifo_wr,
 		empty => fifo_empty,

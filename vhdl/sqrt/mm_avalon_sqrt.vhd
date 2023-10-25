@@ -54,7 +54,7 @@ architecture rtl of avalon_mm_sqrt is
 	constant STAGES : integer := 16;
 
 begin
-    process (clk)
+    process (clk, res_n)
     begin
        if res_n = '0' then
 --			fifo_data <= (others => '0');

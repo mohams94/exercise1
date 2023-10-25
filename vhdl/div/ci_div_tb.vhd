@@ -33,7 +33,7 @@ architecture bench of ci_div_tb is
 	);
 	end component;
 
-	signal clk, clk_en, reset, start, done : std_logic;
+	signal clk, clk_en, reset, start, done : std_logic := '0';
 	signal dataa, datab, result : std_logic_vector(31 downto 0);
 	signal n : std_logic_vector(0 downto 0);
 	constant CLK_PERIOD : time := 10 ns;
@@ -58,21 +58,26 @@ begin
 	stimulus : process
 	begin
 		reset <= '1';
-		wait for 100 ns;
-		start <= '1';
+		wait for CLK_PERIOD * 5;
+		n(0) <= '0';
+		start <= '0';
 		dataa <= (others=>'1');
 		datab <= (others=>'1');
-		n(0) <= '0';
 		wait until rising_edge(clk);
+		start <= '1';
+		wait until rising_edge(clk);
+		start <= '0';
 		dataa <= (others=>'0');
 		datab <= (others=>'1');
-		wait until rising_edge(clk);
+		wait for CLK_PERIOD*48;
 		dataa <= x"12345678";
 		datab <= x"12345678";
-		--wait until rising_edge(clk);
-		--n(0) <= '1';
-		
-		wait for 100 ns;
+		wait for CLK_PERIOD*50;
+		n(0) <= '1';
+		start <= '1';
+		wait until rising_edge(clk);
+		start <= '0';
+		wait for CLK_PERIOD*4;
 
 		wait;
 	end process;

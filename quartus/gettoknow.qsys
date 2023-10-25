@@ -249,7 +249,7 @@
  <interface name="clk" internal="clk.clk_in" type="clock" dir="end" />
  <interface name="reset" internal="clk.clk_in_reset" type="reset" dir="end" />
  <module name="avalon_mm_sqrt" kind="avalon_mm_sqrt" version="1.0" enabled="1" />
- <module name="ci_div" kind="ci_div" version="1.0" enabled="1" />
+ <module name="ci_div" kind="ci_div" version="1.0" enabled="0" />
  <module name="ci_mul" kind="ci_mul" version="1.0" enabled="1" />
  <module name="clk" kind="clock_source" version="22.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
@@ -270,7 +270,7 @@
   <parameter name="cpuArchRev" value="1" />
   <parameter name="cpuID" value="0" />
   <parameter name="cpuReset" value="false" />
-  <parameter name="customInstSlavesSystemInfo"><![CDATA[<info><slave name="ci_div" baseAddress="2" addressSpan="2" clockCycleType="VARIABLE" /><slave name="ci_mul" baseAddress="0" addressSpan="1" clockCycleType="MULTICYCLE" /></info>]]></parameter>
+  <parameter name="customInstSlavesSystemInfo"><![CDATA[<info><slave name="ci_mul" baseAddress="0" addressSpan="1" clockCycleType="MULTICYCLE" /></info>]]></parameter>
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
