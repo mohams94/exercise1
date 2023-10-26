@@ -6,28 +6,22 @@ add wave -noupdate /avalon_mm_sqrt_tb/write
 add wave -noupdate /avalon_mm_sqrt_tb/read
 add wave -noupdate /avalon_mm_sqrt_tb/address
 add wave -noupdate /avalon_mm_sqrt_tb/writedata
-add wave -noupdate /avalon_mm_sqrt_tb/readdata
 add wave -noupdate /avalon_mm_sqrt_tb/CLK_PERIOD
-add wave -noupdate /avalon_mm_sqrt_tb/stop_clock
 add wave -noupdate -divider sqrt
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_q
-add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_data
 add wave -noupdate /avalon_mm_sqrt_tb/uut/sqrt_result
 add wave -noupdate /avalon_mm_sqrt_tb/uut/sqrt_input
-add wave -noupdate /avalon_mm_sqrt_tb/uut/sqrt_remainder
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_empty
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_full
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_rd
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_wr
 add wave -noupdate /avalon_mm_sqrt_tb/uut/read_flag
-add wave -noupdate /avalon_mm_sqrt_tb/uut/STAGES
 add wave -noupdate -divider fifo
-add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/data
-add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/rdreq
-add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/wrreq
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/empty
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/full
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/q
+add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/scfifo_component/wrreq
+add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/scfifo_component/rdreq
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ps} 0}
 quietly wave cursor active 0

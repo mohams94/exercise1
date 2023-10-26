@@ -44,11 +44,13 @@ architecture rtl of avalon_mm_sqrt is
 	end component;
 	
 	-- signals for the components
-	signal fifo_q, fifo_data, sqrt_result, sqrt_input, sqrt_remainder : std_logic_vector(31 downto 0) := (others => '0');
+	signal fifo_q, fifo_data, sqrt_result, sqrt_input : std_logic_vector(31 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
+	signal sqrt_remainder : std_logic_vector(32 downto 0) := (others => '0');
+	signal count, count_next : Integer := 0;
 	
 	-- flag for second read cycle
-	signal read_flag : std_logic;
+	signal read_flag, write_flag : std_logic := '0';
 	
 	-- constant for setting the number of pipeline stages
 	constant STAGES : integer := 16;
@@ -56,59 +58,67 @@ architecture rtl of avalon_mm_sqrt is
 begin
     process (clk, res_n)
     begin
-       if res_n = '0' then
---			fifo_data <= (others => '0');
---			fifo_q <= (others => '0');
---			sqrt_result <= (others => '0');
---			sqrt_input <= (others => '0');
---			sqrt_remainder <= (others => '0');
---			fifo_empty <= '0';
---			fifo_full <= '0';
---			fifo_rd <= '0';
---			fifo_wr <= '0';
---			read_flag <= '0';
-		 elsif rising_edge(clk) then
-            if write = '1' and address(0) = '0' then
+			if rising_edge(clk) then
+				fifo_wr <= '0';
+				readdata <= (others => '-');
+				count <= count_next;
+				if count = STAGES and write_flag = '1' then
 					fifo_wr <= '1';
 					sqrt_input <= writedata;
-            else
-					fifo_wr <= '0';
+					write_flag <= '0';
+				else
+					count_next <= count + 1;
+				end if;
+			
+            if write = '1' and address(0) = '0' then
+					--fifo_wr <= '1';
+					--sqrt_input <= writedata;
+					write_flag <= '1';
+					count_next <= 0;
+            --else
+					--fifo_wr <= '0';
 				end if;
             
             if read = '1' then
                 -- Read the result, if data is available
-                if fifo_empty = '0' and address(0) = '0' then
+                if address(0) = '0' then
                     --sqrt_result <= (others => 'X');  -- Undefined result
 						  read_flag <= '1';
-                else
+                --else
                     --sqrt_result <= 
                 end if;
             end if;
 				
-				if read = '1' and read_flag = '1' and address(0) = '1' then
+				if read = '1' and read_flag = '1' then
 					--readdata <= sqrt_result;
 					fifo_rd <= '1';
 					read_flag <= '0';
+					if address(0) = '0' then
+						readdata <= x"FFFFFFF" & "000" & fifo_empty;
+					else
+						readdata <= fifo_q;
+					end if;
 				else
 					fifo_rd <= '0';
             end if;
         end if;
     end process;
 
-    readdata <= fifo_q when fifo_empty = '0' else (others => 'X');
+    --readdata <= fifo_q when fifo_empty = '0' else (others => 'X');
 	 
 	sqrt: altsqrt
 	generic map(
 		pipeline => STAGES,
 		width => 32,
-		Q_PORT_WIDTH => 32
+		Q_PORT_WIDTH => 32,
+		R_PORT_WIDTH => 33
 	)
 	port map(
 		aclr => res_n,
 		clk => clk,
 		q => sqrt_result,
 		radical => sqrt_input,
-		remainder => open
+		remainder => sqrt_remainder
 	);
 	
 	fifo : alt_fwft_fifo

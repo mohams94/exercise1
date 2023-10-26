@@ -48,7 +48,7 @@ architecture arch of ci_div is
 	constant STAGES : integer := 48;
 	
 	-- signals for the components
-	signal fifo_data, result_wire, dividend, divisor : std_logic_vector(31 downto 0) := (others => '0');
+	signal fifo_data, result_wire, dividend, divisor, remain : std_logic_vector(31 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	signal fifo_q : std_logic_vector(31 downto 0) := (others => '0');
 	
@@ -78,7 +78,7 @@ begin
 						counter <= 0;
 						next_state_0 <= STALL;
 					when STALL =>
-						if counter = STAGES then	-- state machine delayed by 2 clock cycles
+						if counter = STAGES then
 							if fifo_full = '0' then
 								done <= '1';
 								fifo_wr <= '1';
@@ -98,6 +98,7 @@ begin
 			state_1 <= next_state_1;
 				case state_1 is
 					when SLEEP =>
+						done <= '0';
 						if start = '1' then
 							next_state_1 <= IDLE;
 						end if;
@@ -130,11 +131,11 @@ begin
 		
 	port map(
 		clock => clk,
-		clken => '1',
+		clken => clk_en,
 		numer => dividend,
 		denom => divisor,
 		quotient => result_wire,
-		remain => open
+		remain => remain
 	);
 
 	fifo : alt_fwft_fifo

@@ -52,19 +52,33 @@ begin
 
 	stimulus : process
 	begin
+		wait for CLK_PERIOD * 5;
+		res_n <= '0';
+		wait until rising_edge(clk);
 		res_n <= '1';
+		wait until rising_edge(clk);
+		res_n <= '0';
 		read <= '0';
 		write <= '0';
 		wait for CLK_PERIOD * 5;
 		address(0) <= '0';
 		write <= '1';
-		writedata <= x"00000002";
+		writedata <= x"00000004";
 		wait until rising_edge(clk);
 		write <= '0';
 		wait for CLK_PERIOD * 5;
 		read <= '1';
 		wait for CLK_PERIOD * 2;
 		read <= '0';
+		wait for CLK_PERIOD * 20;
+		if readdata = x"00000000" then
+			address(0) <= '1';
+		end if;
+		wait until rising_edge(clk);
+		read <= '1';
+		wait for CLK_PERIOD * 2;
+		read <= '0';
+		wait for CLK_PERIOD * 5;
 		
 		wait;
 	end process;
