@@ -57,8 +57,12 @@ begin
 
 	stimulus : process
 	begin
-		reset <= '1';
 		wait for CLK_PERIOD * 5;
+		reset <= '0';
+		wait until rising_edge(clk);
+		reset <= '1';
+		wait until rising_edge(clk);
+		reset <= '0';
 		n(0) <= '0';
 		start <= '0';
 		dataa <= (others=>'1');
