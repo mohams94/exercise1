@@ -66,9 +66,10 @@ begin
 		 if rising_edge(clk) then
 		-- ################# div_write
 			if n(0) = '0' then
-			done <= '0';
-			fifo_wr <= '0';
-			state_0 <= next_state_0;
+				result <= result_wire;
+				done <= '0';
+				fifo_wr <= '0';
+				state_0 <= next_state_0;
 				case state_0 is
 					when IDLE =>
 						done <= '0';
@@ -84,7 +85,7 @@ begin
 								done <= '1';
 								fifo_wr <= '1';
 								fifo_data <= result_wire;
-								result <= result_wire;
+								--result <= result_wire;
 								counter <= 0;
 								next_state_0 <= IDLE;
 							end if;

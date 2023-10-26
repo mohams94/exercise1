@@ -71,7 +71,7 @@ begin
 		start <= '1';
 		wait until rising_edge(clk);
 		start <= '0';
-		wait until rising_edge(clk);
+		wait for CLK_PERIOD*80;
 		dataa <= (others=>'0');
 		datab <= (others=>'1');
 		wait for CLK_PERIOD*50;
