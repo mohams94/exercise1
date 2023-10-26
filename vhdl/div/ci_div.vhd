@@ -61,12 +61,17 @@ architecture arch of ci_div is
 	
 begin
 	--result <= result_wire;
-	  process(clk)
+	  process(all)
 	  begin
 		 if rising_edge(clk) then
 		-- ################# div_write
-			if n(0) = '0' then
+			--done <= done_next;
+			done <= '0';
+			fifo_rd <= '0';
 			state_0 <= next_state_0;
+			--state_1 <= next_state_1;
+			if n(0) = '0' then
+			next_state_1 <= SLEEP;
 				case state_0 is
 					when IDLE =>
 						done <= '0';
@@ -86,6 +91,7 @@ begin
 								result <= result_wire;
 								next_state_0 <= IDLE;
 							end if;
+							counter <= 0;
 						else
 							counter <= counter + 1;
 							next_state_0 <= STALL;
@@ -95,27 +101,29 @@ begin
 				end case;
 			-- #################   div_read
 			else	
-			state_1 <= next_state_1;
+				state_0 <= IDLE;
+				done <= '0';
 				case state_1 is
 					when SLEEP =>
+						fifo_rd <= '0';
 						done <= '0';
 						if start = '1' then
-							next_state_1 <= IDLE;
+							state_1 <= IDLE;
 						end if;
 					when IDLE =>
 						fifo_rd <= '0';
 						if fifo_empty = '0' then
-							next_state_1 <= DIV_READ;
+							state_1 <= DIV_READ;
 						else
-							next_state_1 <= IDLE;
+							state_1 <= IDLE;
 						end if;
 					when DIV_READ =>
 						fifo_rd <= '1';
 						result <= fifo_q;
-						next_state_1 <= SLEEP;
 						done <= '1';
+						state_1 <= SLEEP;
 					when others =>
-						next_state_1 <= SLEEP;
+						state_1 <= SLEEP;
 				end case;
 			end if;
 		 end if;

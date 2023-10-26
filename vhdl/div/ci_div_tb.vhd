@@ -71,17 +71,22 @@ begin
 		start <= '1';
 		wait until rising_edge(clk);
 		start <= '0';
+		wait until rising_edge(clk);
 		dataa <= (others=>'0');
 		datab <= (others=>'1');
-		wait for CLK_PERIOD*48;
+		wait for CLK_PERIOD*50;
+		start <= '1';
+		wait until rising_edge(clk);
+		start <= '0';
+		wait until rising_edge(clk);
 		dataa <= x"12345678";
 		datab <= x"12345678";
-		wait for CLK_PERIOD*50;
+		wait for CLK_PERIOD*80;
 		n(0) <= '1';
 		start <= '1';
 		wait until rising_edge(clk);
 		start <= '0';
-		wait for CLK_PERIOD*4;
+		wait for CLK_PERIOD*70;
 
 		wait;
 	end process;

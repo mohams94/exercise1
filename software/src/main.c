@@ -111,13 +111,13 @@ void check_speed()
 }
 
 void run()
-{/*
-	alt_printf("#### %x ####" , ALT_CI_CI_DIV(0,6,6));
-	alt_printf("#### %x ####" , ALT_CI_CI_DIV(0,6,3));
-	alt_printf("#### %x ####" , ALT_CI_CI_DIV(0,6,2));
-	alt_printf("#### %x ####" , ALT_CI_CI_DIV(1,6,6));
-	alt_printf("#### %x ####" , ALT_CI_CI_DIV(1,6,3));
-	alt_printf("#### %x ####" , ALT_CI_CI_DIV(1,6,2));*/
+{
+	//alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,6,6));
+	//alt_printf("2 #### %x ####\n" , ALT_CI_CI_DIV(0,6,3));
+	//alt_printf("3 #### %x ####\n" , ALT_CI_CI_DIV(0,6,2));
+	alt_printf("4 #### %x ####\n" , ALT_CI_CI_DIV(1,6,6));
+	alt_printf("5 #### %x ####\n" , ALT_CI_CI_DIV(1,6,3));
+	alt_printf("6 #### %x ####\n" , ALT_CI_CI_DIV(1,6,2));
 	
 	char line_buffer[16];
 
