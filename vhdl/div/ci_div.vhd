@@ -65,13 +65,10 @@ begin
 	  begin
 		 if rising_edge(clk) then
 		-- ################# div_write
-			--done <= done_next;
-			done <= '0';
-			fifo_rd <= '0';
-			state_0 <= next_state_0;
-			--state_1 <= next_state_1;
 			if n(0) = '0' then
-			next_state_1 <= SLEEP;
+			done <= '0';
+			fifo_wr <= '0';
+			state_0 <= next_state_0;
 				case state_0 is
 					when IDLE =>
 						done <= '0';
@@ -80,7 +77,6 @@ begin
 							dividend <= dataa;
 							divisor <= datab;
 						end if;
-						counter <= 0;
 						next_state_0 <= STALL;
 					when STALL =>
 						if counter = STAGES then
@@ -89,9 +85,9 @@ begin
 								fifo_wr <= '1';
 								fifo_data <= result_wire;
 								result <= result_wire;
+								counter <= 0;
 								next_state_0 <= IDLE;
 							end if;
-							counter <= 0;
 						else
 							counter <= counter + 1;
 							next_state_0 <= STALL;
