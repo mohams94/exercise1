@@ -49,10 +49,11 @@ architecture arch of ci_div is
 	
 	-- signals for the components
 	signal fifo_data, result_wire, dividend, divisor, remain : std_logic_vector(31 downto 0) := (others => '0');
-	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
+	signal fifo_empty, fifo_full, fifo_rd, fifo_wr, division_flag : std_logic := '0';
 	signal fifo_q : std_logic_vector(31 downto 0) := (others => '0');
+	signal shift_reg : std_logic_vector(STAGES-1 downto 0) := (others => '0');
 	
-	type State_Type_0 is (IDLE, STALL);
+	type State_Type_0 is (IDLE, CALCULATE);
 	type State_Type_1 is (IDLE, DIV_READ, SLEEP);
 	signal state_0, next_state_0 : State_Type_0 := IDLE;
 	signal state_1, next_state_1 : State_Type_1 := SLEEP;
@@ -61,40 +62,45 @@ architecture arch of ci_div is
 	
 begin
 	--result <= result_wire;
-	  process(all)
+	
+	  process(clk)
 	  begin
 		 if rising_edge(clk) then
+		 result <= result_wire;
 		-- ################# div_write
 			if n(0) = '0' then
-				result <= result_wire;
 				done <= '0';
-				fifo_wr <= '0';
-				state_0 <= next_state_0;
+				--fifo_wr <= '0';
+				--state_0 <= next_state_0;
 				case state_0 is
 					when IDLE =>
-						done <= '0';
+						--done <= '0';
 						fifo_wr <= '0';
 						if start = '1' then
 							dividend <= dataa;
 							divisor <= datab;
-						end if;
-						next_state_0 <= STALL;
-					when STALL =>
-						if counter = STAGES then
-							if fifo_full = '0' then
-								done <= '1';
-								fifo_wr <= '1';
-								fifo_data <= result_wire;
-								--result <= result_wire;
-								counter <= 0;
-								next_state_0 <= IDLE;
-							end if;
+							done <= '1';
+							division_flag <= '1';
+							state_0 <= IDLE;
 						else
-							counter <= counter + 1;
-							next_state_0 <= STALL;
+							division_flag <= '0';
 						end if;
+--					when STALL =>
+--						if counter = STAGES then
+--							if fifo_full = '0' then
+--								done <= '1';
+--								fifo_wr <= '1';
+--								fifo_data <= result_wire;
+--								--result <= result_wire;
+--								counter <= 0;
+--								state_0 <= IDLE;
+--							end if;
+--						else
+--							counter <= counter + 1;
+--							state_0 <= STALL;
+--						end if;
 					when others =>
-						next_state_0 <= IDLE;
+						state_0 <= IDLE;
 				end case;
 			-- #################   div_read
 			else	
@@ -123,6 +129,12 @@ begin
 						state_1 <= SLEEP;
 				end case;
 			end if;
+			if shift_reg(0) = '1' and fifo_full = '0' then
+				fifo_wr <= '1';
+			else
+				fifo_wr <= '0';
+			end if;
+			shift_reg <= division_flag & shift_reg(STAGES-1 downto 1);
 		 end if;
 	  end process;
 
