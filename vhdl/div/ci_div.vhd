@@ -62,11 +62,11 @@ architecture arch of ci_div is
 	
 begin
 	--result <= result_wire;
-	
+	--result <= fifo_q;
 	  process(clk)
 	  begin
 		 if rising_edge(clk) then
-		 result <= result_wire;
+		 --result <= fifo_q;
 		-- ################# div_write
 			if n(0) = '0' then
 				done <= '0';
@@ -122,7 +122,7 @@ begin
 						end if;
 					when DIV_READ =>
 						fifo_rd <= '1';
-						result <= fifo_q;
+						--result <= fifo_q;
 						done <= '1';
 						state_1 <= SLEEP;
 					when others =>
@@ -131,6 +131,7 @@ begin
 			end if;
 			if shift_reg(0) = '1' and fifo_full = '0' then
 				fifo_wr <= '1';
+				fifo_data <= result_wire;
 			else
 				fifo_wr <= '0';
 			end if;
@@ -168,7 +169,7 @@ begin
 		wrreq => fifo_wr,
 		empty => fifo_empty,
 		full => fifo_full,
-		q => fifo_q
+		q => result
 	);
 
 end architecture;

@@ -59,11 +59,12 @@ begin
 	begin
 		dataa <= (others=>'1');
 		datab <= (others=>'1');
+		n(0) <= '0';
 		wait for CLK_PERIOD * 5;
 		reset <= '0';
 		wait until rising_edge(clk);
 		reset <= '1';
-		wait until rising_edge(clk);
+		wait for CLK_PERIOD * 2;
 		reset <= '0';
 		n(0) <= '0';
 		start <= '0';
@@ -72,8 +73,8 @@ begin
 		wait until rising_edge(clk);
 		start <= '0';
 		wait until rising_edge(clk);
-		dataa <= x"12345678";
-		datab <= x"12345678";
+		dataa <= x"00000008";
+		datab <= x"00000004";
 		start <= '1';
 		wait until rising_edge(clk);
 		start <= '0';
