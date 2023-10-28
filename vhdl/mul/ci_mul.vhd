@@ -34,6 +34,6 @@ begin
 						result => result_wire,
 						sum => (others => '0'));
 
-		result <= result_wire(31 downto 0);
+		result <= result_wire(47 downto 16);
 end architecture;
 

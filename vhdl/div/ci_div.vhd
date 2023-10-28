@@ -48,9 +48,10 @@ architecture arch of ci_div is
 	constant STAGES : integer := 48;
 	
 	-- signals for the components
-	signal fifo_data, result_wire, dividend, divisor, remain : std_logic_vector(31 downto 0) := (others => '0');
+	signal fifo_data, fifo_q, remain : std_logic_vector(31 downto 0) := (others => '0');
+	signal dividend, divisor : std_logic_vector(47 downto 0) := (others => '1');
+	signal result_wire : std_logic_vector(47 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr, division_flag : std_logic := '0';
-	signal fifo_q : std_logic_vector(31 downto 0) := (others => '0');
 	signal shift_reg : std_logic_vector(STAGES-1 downto 0) := (others => '0');
 	
 	type State_Type_0 is (IDLE, CALCULATE);
@@ -77,8 +78,8 @@ begin
 						--done <= '0';
 						fifo_wr <= '0';
 						if start = '1' then
-							dividend <= dataa;
-							divisor <= datab;
+							dividend <= dataa & x"0000";
+							divisor <= datab & x"0000";
 							done <= '1';
 							division_flag <= '1';
 							state_0 <= IDLE;
@@ -131,7 +132,7 @@ begin
 			end if;
 			if shift_reg(0) = '1' and fifo_full = '0' then
 				fifo_wr <= '1';
-				fifo_data <= result_wire;
+				fifo_data <= result_wire(47 downto 16);
 			else
 				fifo_wr <= '0';
 			end if;
@@ -141,8 +142,8 @@ begin
 
 	divider : lpm_divide
 	generic map(
-		LPM_WIDTHN => 32,
-		LPM_WIDTHD => 32,
+		LPM_WIDTHN => 48,
+		LPM_WIDTHD => 48,
 		LPM_PIPELINE => STAGES,
 		LPM_DREPRESENTATION => "SIGNED",
 		LPM_NREPRESENTATION => "SIGNED")

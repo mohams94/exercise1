@@ -147,7 +147,7 @@ def RunRemote():
 		exit(1)
 
 	time_wait = 0.5
-	timeout = 10
+	timeout = 20
 	time_waited = 0
 	while True:
 		if 'Error' in hw_output:

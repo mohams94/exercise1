@@ -115,7 +115,7 @@ void run()
 	alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,0xFFFFFFFF,0xFFFFFFFF));
 	alt_printf("2 #### %x ####\n" , ALT_CI_CI_DIV(0,0x12345678,0x12345678));
 	alt_printf("4 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));
-	alt_printf("5 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));*/
+	alt_printf("5 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));
 	
 	alt_printf("write number into sqrt module:");
 	IOWR(AVALON_MM_SQRT_BASE, 0, 0x00000001);
@@ -124,7 +124,7 @@ void run()
 	while(IORD(AVALON_MM_SQRT_BASE, 0));
 	alt_printf(" done\n\n");
 	alt_printf("read result from sqrt module:");
-	alt_printf("#### %x #### done.", IORD(AVALON_MM_SQRT_BASE, 1));
+	alt_printf("#### %x #### done.", IORD(AVALON_MM_SQRT_BASE, 1));*/
 	
 	char line_buffer[16];
 
