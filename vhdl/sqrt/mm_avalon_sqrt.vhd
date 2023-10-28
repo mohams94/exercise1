@@ -47,7 +47,8 @@ architecture rtl of avalon_mm_sqrt is
 	constant STAGES : integer := 16;
 	-- signals for the components
 	signal fifo_q, fifo_data : std_logic_vector(31 downto 0) := (others => '0');
-	signal sqrt_result, sqrt_input : std_logic_vector(47 downto 0) := (others => '0');
+	signal sqrt_input : std_logic_vector(47 downto 0) := (others => '0');
+	signal sqrt_result : std_logic_vector(23 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	signal sqrt_remainder : std_logic_vector(32 downto 0) := (others => '0');
 	signal count, count_next : Integer := 0;
@@ -117,7 +118,7 @@ begin
 	generic map(
 		pipeline => STAGES,
 		width => 48,
-		Q_PORT_WIDTH => 48,
+		Q_PORT_WIDTH => 24,
 		R_PORT_WIDTH => 33
 	)
 	port map(
@@ -136,7 +137,7 @@ begin
 	port map(
 		aclr => res_n,
 		clock => clk,
-		data => sqrt_result(47 downto 16),
+		data => x"000000" & sqrt_result(23 downto 16),
 		rdreq => fifo_rd,
 		wrreq => fifo_wr,
 		empty => fifo_empty,

@@ -36,7 +36,7 @@ void v3norm(fix16_t* values, uint32_t count)
 		fix16_t z = values[3*i+2];
 		
 
-		IOWR(AVALON_MM_SQRT_BASE, 0, ALT_CI_CI_MUL(values[3*i], values[3*i]) + ALT_CI_CI_MUL(values[3*i+1], values[3*i+1]) + ALT_CI_CI_MUL(values[3*i+2], values[3*i+2]));
+		IOWR(AVALON_MM_SQRT_BASE, 0, ALT_CI_CI_MUL(x, x) + ALT_CI_CI_MUL(y, y) + ALT_CI_CI_MUL(z, z));
 		
 		while(IORD(AVALON_MM_SQRT_BASE, 0));	// wait
 		

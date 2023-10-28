@@ -79,7 +79,7 @@ begin
 						fifo_wr <= '0';
 						if start = '1' then
 							dividend <= dataa & x"0000";
-							divisor <= datab & x"0000";
+							divisor <= x"0000" & datab;
 							done <= '1';
 							division_flag <= '1';
 							state_0 <= IDLE;
@@ -132,7 +132,7 @@ begin
 			end if;
 			if shift_reg(0) = '1' and fifo_full = '0' then
 				fifo_wr <= '1';
-				fifo_data <= result_wire(47 downto 16);
+				fifo_data <= result_wire(31 downto 0);
 			else
 				fifo_wr <= '0';
 			end if;
