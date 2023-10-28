@@ -123,7 +123,7 @@ begin
 	port map(
 		aclr => res_n,
 		clk => clk,
-		q => sqrt_result(47 downto 16),
+		q => sqrt_result,
 		radical => sqrt_input,
 		remainder => sqrt_remainder
 	);
@@ -136,7 +136,7 @@ begin
 	port map(
 		aclr => res_n,
 		clock => clk,
-		data => sqrt_result,
+		data => sqrt_result(47 downto 16),
 		rdreq => fifo_rd,
 		wrreq => fifo_wr,
 		empty => fifo_empty,

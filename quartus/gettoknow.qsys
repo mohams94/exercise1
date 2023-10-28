@@ -177,6 +177,14 @@
          type = "String";
       }
    }
+   element gettoknow
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone IV E";
+         type = "String";
+      }
+   }
    element jtag_uart
    {
       datum _sortIndex
