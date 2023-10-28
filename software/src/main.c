@@ -117,6 +117,15 @@ void run()
 	alt_printf("4 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));
 	alt_printf("5 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));*/
 	
+	alt_printf("write number into sqrt module:");
+	IOWR(AVALON_MM_SQRT_BASE, 0, 0x00000001);
+	alt_printf(" done\n\n");
+	alt_printf("wait for calculation:");
+	while(IORD(AVALON_MM_SQRT_BASE, 0));
+	alt_printf(" done\n\n");
+	alt_printf("read result from sqrt module:");
+	alt_printf("#### %x #### done.", IORD(AVALON_MM_SQRT_BASE, 1));
+	
 	char line_buffer[16];
 
 	while(1){
