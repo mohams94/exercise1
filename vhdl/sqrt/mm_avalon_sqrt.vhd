@@ -43,64 +43,70 @@ architecture rtl of avalon_mm_sqrt is
 			);
 	end component;
 	
+	-- constant for setting the number of pipeline stages
+	constant STAGES : integer := 16;
 	-- signals for the components
 	signal fifo_q, fifo_data, sqrt_result, sqrt_input : std_logic_vector(31 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	signal sqrt_remainder : std_logic_vector(32 downto 0) := (others => '0');
 	signal count, count_next : Integer := 0;
+	signal shift_reg : std_logic_vector(STAGES-1 downto 0) := (others => '0');
 	
 	-- flag for second read cycle
-	signal read_flag, write_flag : std_logic := '0';
-	
-	-- constant for setting the number of pipeline stages
-	constant STAGES : integer := 16;
+	signal read_flag, write_flag, division_flag : std_logic := '0';
 
 begin
     process (clk, res_n)
     begin
 			if rising_edge(clk) then
-				fifo_wr <= '0';
-				readdata <= (others => '-');
-				count <= count_next;
-				if count = STAGES and write_flag = '1' then
-					fifo_wr <= '1';
-					sqrt_input <= writedata;
-					write_flag <= '0';
-				else
-					count_next <= count + 1;
-				end if;
+				--fifo_wr <= '0';
+				readdata <= (others => 'X');
+--				if count = STAGES and write_flag = '1' then
+--					fifo_wr <= '1';
+--					sqrt_input <= writedata;
+--					write_flag <= '0';
+--				else
+--					count_next <= count + 1;
+--				end if;
 			
             if write = '1' and address(0) = '0' then
 					--fifo_wr <= '1';
-					--sqrt_input <= writedata;
-					write_flag <= '1';
-					count_next <= 0;
-            --else
+					sqrt_input <= writedata;
+					--write_flag <= '1';
+					--fifo_wr <= '1';
+					division_flag <= '1';
+					--count_next <= 0;
+            else
+					division_flag <= '0';
 					--fifo_wr <= '0';
 				end if;
-            
+				
             if read = '1' then
                 -- Read the result, if data is available
-                if address(0) = '0' then
-                    --sqrt_result <= (others => 'X');  -- Undefined result
-						  read_flag <= '1';
-                --else
-                    --sqrt_result <= 
-                end if;
+                read_flag <= '1';
+					 fifo_rd <= '1';
             end if;
 				
 				if read = '1' and read_flag = '1' then
 					--readdata <= sqrt_result;
-					fifo_rd <= '1';
+					 if address(0) = '0' then
+                    --sqrt_result <= (others => 'X');  -- Undefined result
+						  readdata <= x"0000000" & "000" & fifo_empty;
+                else
+                    readdata <= fifo_q;
+						  --sqrt_result <= 
+                end if;
+ 					fifo_rd <= '0';
 					read_flag <= '0';
-					if address(0) = '0' then
-						readdata <= x"FFFFFFF" & "000" & fifo_empty;
-					else
-						readdata <= fifo_q;
-					end if;
-				else
-					fifo_rd <= '0';
             end if;
+				
+				if shift_reg(0) = '1' and fifo_full = '0' then
+					fifo_wr <= '1';
+					--sqrt_input <= writedata;
+				else
+					fifo_wr <= '0';
+				end if;
+				shift_reg <= division_flag & shift_reg(STAGES-1 downto 1);
         end if;
     end process;
 

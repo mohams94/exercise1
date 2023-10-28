@@ -6,6 +6,7 @@ add wave -noupdate /avalon_mm_sqrt_tb/write
 add wave -noupdate /avalon_mm_sqrt_tb/read
 add wave -noupdate /avalon_mm_sqrt_tb/address
 add wave -noupdate /avalon_mm_sqrt_tb/writedata
+add wave -noupdate /avalon_mm_sqrt_tb/readdata
 add wave -noupdate /avalon_mm_sqrt_tb/CLK_PERIOD
 add wave -noupdate -divider sqrt
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo_q
@@ -23,8 +24,8 @@ add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/q
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/scfifo_component/wrreq
 add wave -noupdate /avalon_mm_sqrt_tb/uut/fifo/scfifo_component/rdreq
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {0 ps} 0}
-quietly wave cursor active 0
+WaveRestoreCursors {{Cursor 1} {285000 ps} 0}
+quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -39,4 +40,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {1 ns}
+WaveRestoreZoom {0 ps} {2048 ns}
