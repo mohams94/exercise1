@@ -63,7 +63,12 @@ begin
 		wait for CLK_PERIOD * 2;
 		address(0) <= '0';
 		write <= '1';
-		writedata <= x"00000004";
+		writedata <= x"00040000";
+		wait until rising_edge(clk);
+		write <= '0';
+		wait for CLK_PERIOD * 2;
+		write <= '1';
+		writedata <= x"00090000";
 		wait until rising_edge(clk);
 		write <= '0';
 		wait for CLK_PERIOD * 20;
@@ -71,10 +76,12 @@ begin
 		wait for CLK_PERIOD * 2;
 		read <= '0';
 		wait for CLK_PERIOD * 5;
-		if readdata = x"00000000" then
-			address(0) <= '1';
-		end if;
+		address(0) <= '1';
 		wait until rising_edge(clk);
+		read <= '1';
+		wait for CLK_PERIOD * 2;
+		read <= '0';
+		wait for CLK_PERIOD * 20;
 		read <= '1';
 		wait for CLK_PERIOD * 2;
 		read <= '0';

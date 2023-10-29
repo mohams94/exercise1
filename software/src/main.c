@@ -112,9 +112,9 @@ void check_speed()
 
 void run()
 {
-	alt_printf("DIV_WRITE #### %x ####\n" , ALT_CI_CI_DIV(0x0, 0x000a0000, 0x00050000));
+	//alt_printf("DIV_WRITE #### %x ####\n" , ALT_CI_CI_DIV(0x0, 0x000a0000, 0x00050000));
 	
-	alt_printf("DIV_READ #### %x ####\n" , ALT_CI_CI_DIV(0x1, 0, 0));
+	//alt_printf("DIV_READ #### %x ####\n" , ALT_CI_CI_DIV(0x1, 0, 0));
 /*
 	alt_printf(ALT_CI_CI_DIV_N_MASK);
 	alt_printf("\n");
@@ -124,9 +124,9 @@ void run()
 	//alt_printf("MUL: #### %x ####\n" , ALT_CI_CI_MUL(0x00090000,0x00010000));
 	
 	
-	//IOWR(AVALON_MM_SQRT_BASE, 0, 0x00090000);
-	//while(IORD(AVALON_MM_SQRT_BASE, 0));
-	//alt_printf("SQURT: #### %x ####", IORD(AVALON_MM_SQRT_BASE, 1));
+	IOWR(AVALON_MM_SQRT_BASE, 0, 0x00090000);
+	while(IORD(AVALON_MM_SQRT_BASE, 0));
+	alt_printf("SQURT: #### %x ####", IORD(AVALON_MM_SQRT_BASE, 1));
 	
 	//alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,0x00090000,0x00030000));
 /*
