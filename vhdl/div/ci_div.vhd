@@ -67,76 +67,95 @@ begin
 	  process(clk)
 	  begin
 		 if rising_edge(clk) then
-		 --result <= fifo_q;
-		-- ################# div_write
-			if n(0) = '0' then
-				done <= '0';
-				--fifo_wr <= '0';
-				--state_0 <= next_state_0;
-				case state_0 is
-					when IDLE =>
-						--done <= '0';
-						fifo_wr <= '0';
-						if start = '1' then
-							dividend <= dataa & x"0000";
-							divisor <= x"0000" & datab;
-							done <= '1';
-							division_flag <= '1';
-							state_0 <= IDLE;
-						else
-							division_flag <= '0';
-						end if;
---					when STALL =>
---						if counter = STAGES then
---							if fifo_full = '0' then
---								done <= '1';
---								fifo_wr <= '1';
---								fifo_data <= result_wire;
---								--result <= result_wire;
---								counter <= 0;
---								state_0 <= IDLE;
---							end if;
---						else
---							counter <= counter + 1;
---							state_0 <= STALL;
---						end if;
-					when others =>
-						state_0 <= IDLE;
-				end case;
-			-- #################   div_read
-			else	
-				state_0 <= IDLE;
-				done <= '0';
-				case state_1 is
-					when SLEEP =>
-						fifo_rd <= '0';
-						done <= '0';
-						if start = '1' then
-							state_1 <= IDLE;
-						end if;
-					when IDLE =>
-						fifo_rd <= '0';
-						if fifo_empty = '0' then
-							state_1 <= DIV_READ;
-						else
-							state_1 <= IDLE;
-						end if;
-					when DIV_READ =>
-						fifo_rd <= '1';
-						--result <= fifo_q;
-						done <= '1';
-						state_1 <= SLEEP;
-					when others =>
-						state_1 <= SLEEP;
-				end case;
-			end if;
-			if shift_reg(0) = '1' and fifo_full = '0' then
-				fifo_wr <= '1';
-				fifo_data <= result_wire(31 downto 0);
-			else
+			if reset = '1' then
+				fifo_data <= (others => '0');
+				--fifo_q <= (others => '0');
+				dividend  <= (others => '1');
+				divisor <= (others => '1');
+				--result_wire <= (others => '0');
+				shift_reg <= (others => '0');
+				--remain <= (others => '0');
+				--fifo_empty <= '0';
+				--fifo_full <= '0';
+				fifo_rd <= '0';
 				fifo_wr <= '0';
-			end if;
-			shift_reg <= division_flag & shift_reg(STAGES-1 downto 1);
+				division_flag <= '0';
+				state_0 <= IDLE;
+				state_1 <= SLEEP;
+				done <= '0';
+			else
+						 --result <= fifo_q;
+			-- ################# div_write
+				if n(0) = '0' then
+					done <= '0';
+					--fifo_wr <= '0';
+					--state_0 <= next_state_0;
+					case state_0 is
+						when IDLE =>
+							done <= '0';
+							fifo_wr <= '0';
+							if start = '1' then
+								dividend <= dataa & x"0000";
+								divisor <= x"0000" & datab;
+								done <= '1';
+								division_flag <= '1';
+								state_0 <= IDLE;
+							else
+								division_flag <= '0';
+							end if;
+	--					when STALL =>
+	--						if counter = STAGES then
+	--							if fifo_full = '0' then
+	--								done <= '1';
+	--								fifo_wr <= '1';
+	--								fifo_data <= result_wire;
+	--								--result <= result_wire;
+	--								counter <= 0;
+	--								state_0 <= IDLE;
+	--							end if;
+	--						else
+	--							counter <= counter + 1;
+	--							state_0 <= STALL;
+	--						end if;
+						when others =>
+							state_0 <= IDLE;
+					end case;
+				-- #################   div_read
+				else	
+					state_0 <= IDLE;
+					done <= '0';
+					case state_1 is
+						when SLEEP =>
+							fifo_rd <= '0';
+							done <= '0';
+							if start = '1' then
+								state_1 <= IDLE;
+							end if;
+						when IDLE =>
+							fifo_rd <= '0';
+							if fifo_empty = '0' then
+								state_1 <= DIV_READ;
+							else
+								state_1 <= IDLE;
+							end if;
+						when DIV_READ =>
+							fifo_rd <= '1';
+							--result <= fifo_q;
+							done <= '1';
+							state_1 <= SLEEP;
+						when others =>
+							state_1 <= SLEEP;
+					end case;
+				end if;
+				
+				if shift_reg(0) = '1' and fifo_full = '0' then
+					fifo_wr <= '1';
+					fifo_data <= result_wire(31 downto 0);
+				else
+					fifo_wr <= '0';
+				end if;
+				shift_reg <= division_flag & shift_reg(STAGES-1 downto 1);
+				end if;
 		 end if;
 	  end process;
 

@@ -57,27 +57,26 @@ begin
 
 	stimulus : process
 	begin
-		dataa <= (others=>'1');
-		datab <= (others=>'1');
+		dataa <= x"000a0000";
+		datab <= x"00050000";
 		n(0) <= '0';
+		start <= '0';
 		wait for CLK_PERIOD * 5;
 		reset <= '0';
 		wait until rising_edge(clk);
 		reset <= '1';
-		wait for CLK_PERIOD * 2;
+		wait until rising_edge(clk);
 		reset <= '0';
-		n(0) <= '0';
-		start <= '0';
 		wait until rising_edge(clk);
 		start <= '1';
 		wait until rising_edge(clk);
 		start <= '0';
 		wait until rising_edge(clk);
-		dataa <= x"00000008";
-		datab <= x"00000004";
-		start <= '1';
-		wait until rising_edge(clk);
-		start <= '0';
+		--dataa <= x"00000008";
+		--datab <= x"00000004";
+		--start <= '1';
+		--wait until rising_edge(clk);
+		--start <= '0';
 		wait for CLK_PERIOD*5;
 		n(0) <= '1';
 		start <= '1';

@@ -46,9 +46,9 @@ architecture rtl of avalon_mm_sqrt is
 	-- constant for setting the number of pipeline stages
 	constant STAGES : integer := 16;
 	-- signals for the components
-	signal fifo_q, fifo_data : std_logic_vector(31 downto 0) := (others => '0');
-	signal sqrt_input : std_logic_vector(47 downto 0) := (others => '0');
-	signal sqrt_result : std_logic_vector(23 downto 0) := (others => '0');
+	signal fifo_q, fifo_data, sqrt_input : std_logic_vector(31 downto 0) := (others => '0');
+	--signal sqrt_input : std_logic_vector(47 downto 0) := (others => '0');
+	signal sqrt_result : std_logic_vector(15 downto 0) := (others => '0');
 	signal fifo_empty, fifo_full, fifo_rd, fifo_wr : std_logic := '0';
 	signal sqrt_remainder : std_logic_vector(32 downto 0) := (others => '0');
 	signal count, count_next : Integer := 0;
@@ -73,7 +73,7 @@ begin
 			
             if write = '1' and address(0) = '0' then
 					--fifo_wr <= '1';
-					sqrt_input <= writedata & x"0000";
+					sqrt_input <= writedata;
 					--write_flag <= '1';
 					--fifo_wr <= '1';
 					division_flag <= '1';
@@ -117,8 +117,8 @@ begin
 	sqrt: altsqrt
 	generic map(
 		pipeline => STAGES,
-		width => 48,
-		Q_PORT_WIDTH => 24,
+		width => 32,
+		Q_PORT_WIDTH => 16,
 		R_PORT_WIDTH => 33
 	)
 	port map(
@@ -137,7 +137,7 @@ begin
 	port map(
 		aclr => res_n,
 		clock => clk,
-		data => x"000000" & sqrt_result(23 downto 16),
+		data => x"00" & sqrt_result & x"00",
 		rdreq => fifo_rd,
 		wrreq => fifo_wr,
 		empty => fifo_empty,
