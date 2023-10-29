@@ -87,22 +87,12 @@ begin
 						 --result <= fifo_q;
 			-- ################# div_write
 				if n(0) = '0' then
-					done <= '0';
+--					done <= '0';
 					--fifo_wr <= '0';
 					--state_0 <= next_state_0;
-					case state_0 is
-						when IDLE =>
-							done <= '0';
-							fifo_wr <= '0';
-							if start = '1' then
-								dividend <= dataa & x"0000";
-								divisor <= x"0000" & datab;
-								done <= '1';
-								division_flag <= '1';
-								state_0 <= IDLE;
-							else
-								division_flag <= '0';
-							end if;
+--					case state_0 is
+--						when IDLE =>
+
 	--					when STALL =>
 	--						if counter = STAGES then
 	--							if fifo_full = '0' then
@@ -117,35 +107,52 @@ begin
 	--							counter <= counter + 1;
 	--							state_0 <= STALL;
 	--						end if;
-						when others =>
-							state_0 <= IDLE;
-					end case;
+--						when others =>
+--							state_0 <= IDLE;
+--					end case;
+					
+					
+					if start = '1' and fifo_full = '0' then
+						dividend <= dataa & x"0000";
+						divisor <= x"0000" & datab;
+						done <= '1';
+						division_flag <= '1';
+						--state_0 <= IDLE;
+					else
+						done <= '0';
+						division_flag <= '0';
+					end if;
 				-- #################   div_read
 				else	
-					state_0 <= IDLE;
-					done <= '0';
-					case state_1 is
-						when SLEEP =>
-							fifo_rd <= '0';
-							done <= '0';
-							if start = '1' then
-								state_1 <= IDLE;
-							end if;
-						when IDLE =>
-							fifo_rd <= '0';
-							if fifo_empty = '0' then
-								state_1 <= DIV_READ;
-							else
-								state_1 <= IDLE;
-							end if;
-						when DIV_READ =>
-							fifo_rd <= '1';
-							--result <= fifo_q;
-							done <= '1';
-							state_1 <= SLEEP;
-						when others =>
-							state_1 <= SLEEP;
-					end case;
+					--state_0 <= IDLE;
+					--done <= '0';
+					--case state_1 is
+					if start = '1' and fifo_empty = '0'then
+						fifo_rd <= '1';
+						done <= '1';
+					else 
+						fifo_rd <= '0';
+						done <= '0';
+					end if;
+--						state_1 <= DIV_READ;
+--					else
+--						state_1 <= SLEEP;
+--					end if;
+--						when SLEEP =>
+
+--						when IDLE =>
+--							fifo_rd <= '0';
+--							if fifo_empty = '0' then
+--								state_1 <= DIV_READ;
+--							else
+--								state_1 <= IDLE;
+--							end if;
+--						when DIV_READ =>
+--
+--							state_1 <= SLEEP;
+--						when others =>
+--							state_1 <= SLEEP;
+--					end case;
 				end if;
 				
 				if shift_reg(0) = '1' and fifo_full = '0' then
@@ -169,7 +176,7 @@ begin
 		
 	port map(
 		clock => clk,
-		clken => clk_en,
+		clken => '1',
 		numer => dividend,
 		denom => divisor,
 		quotient => result_wire,
