@@ -84,10 +84,8 @@ begin
 					if write = '1' and address(0) = '0' then
 						sqrt_input <= x"00000000" & writedata;--x"000" & "00" & writedata & "00" & x"0000";
 						division_flag <= '1';
-						error_flag <= '1';
 					else
 						division_flag <= '0';
-						error_flag <= '0';
 					end if;
 					
 					if read = '1' and fifo_empty = '1' then
@@ -136,7 +134,7 @@ begin
 		NUM_ELEMENTS => 128)
 
 	port map(
-		aclr => '0',
+		aclr => (not res_n),
 		clock => clk,
 		data => sqrt_result,
 		rdreq => fifo_rd,
