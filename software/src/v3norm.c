@@ -28,7 +28,31 @@ void v3norm(fix16_t* values, uint32_t count)
 	}*/
 	
     // ########################### rewritten main() function ##########################
-    
+  /*  	for (fix16_t i=0; i < count; i++) {
+	
+		fix16_t x = values[3*i];
+		fix16_t y = values[3*i+1];
+		fix16_t z = values[3*i+2];
+		
+
+		IOWR(AVALON_MM_SQRT_BASE, 0, ALT_CI_CI_MUL(x, x) + ALT_CI_CI_MUL(y, y) + ALT_CI_CI_MUL(z, z));
+		
+		while(IORD(AVALON_MM_SQRT_BASE, 0));	// wait
+		
+		fix16_t len = IORD(AVALON_MM_SQRT_BASE, 1);
+		
+
+
+		fix16_t x_norm = ALT_CI_CI_DIV(0,x,len);	
+		fix16_t y_norm = ALT_CI_CI_DIV(0,y,len);
+		fix16_t z_norm = ALT_CI_CI_DIV(0,z,len);
+								
+		values[3*i] = ALT_CI_CI_DIV(1,x_norm,len);
+		values[3*i+1] = ALT_CI_CI_DIV(1,y_norm,len);
+		values[3*i+2] = ALT_CI_CI_DIV(1,z_norm,len);
+	}*/
+// #############################################################################
+    /*
 	for (fix16_t i=0; i < count; i++) {
 	
 		fix16_t x = values[3*i];
@@ -51,18 +75,16 @@ void v3norm(fix16_t* values, uint32_t count)
 		values[3*i] = ALT_CI_CI_DIV(1,x_norm,len);
 		values[3*i+1] = ALT_CI_CI_DIV(1,y_norm,len);
 		values[3*i+2] = ALT_CI_CI_DIV(1,z_norm,len);
-	}
+	}*/
 	// ############################################################################
-	/*
-	values[93] = ALT_CI_CI_DIV(0,6,6);
-	values[94] = ALT_CI_CI_DIV(0,6,3);
-	values[95] = ALT_CI_CI_DIV(0,6,2);
-	values[93] = ALT_CI_CI_DIV(1,6,6);
-	values[94] = ALT_CI_CI_DIV(1,6,3);
-	values[95] = ALT_CI_CI_DIV(1,6,2);
+	
+	values[94] = ALT_CI_CI_DIV(0,0xFFFFFFFF,0xFFFFFFFF);
+	values[95] = ALT_CI_CI_DIV(0,0x12345678,0x12345678);
+	values[94] = ALT_CI_CI_DIV(1,0,0);
+	values[95] = ALT_CI_CI_DIV(1,0,0);
 	
 	//alt_printf("%d", values[93]);
-	
+	/*
 		values[93] = ALT_CI_CI_DIV(0,1,1);
 		values[94] = ALT_CI_CI_DIV(0,2,2);
 		values[95] = ALT_CI_CI_DIV(0,3,3);

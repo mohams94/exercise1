@@ -53,11 +53,11 @@ begin
 	stimulus : process
 	begin
 		wait for CLK_PERIOD * 5;
-		res_n <= '0';
+		res_n <= '1';
 		wait until rising_edge(clk);
-		res_n <= '1';											
+		res_n <= '0';											
 		wait until rising_edge(clk);
-		res_n <= '0';
+		res_n <= '1';
 		read <= '0';
 		write <= '0';
 		wait for CLK_PERIOD * 2;

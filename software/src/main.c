@@ -112,6 +112,42 @@ void check_speed()
 
 void run()
 {
+/*
+		fix16_t x = ALT_CI_CI_DIV(0,6,3);
+
+		alt_printf("A%x\n", ALT_CI_CI_DIV(1,0,0));
+
+/*
+
+		for (fix16_t i=1; i <= 50; i++) {
+	
+		fix16_t x = 0x00090000;
+		fix16_t y = 0x00040000;
+		fix16_t z = 0x00010000;
+		
+
+		IOWR(AVALON_MM_SQRT_BASE, 0, ALT_CI_CI_MUL(x, x) + ALT_CI_CI_MUL(y, y) + ALT_CI_CI_MUL(z, z));
+		alt_printf("A%x\n", i);
+		while(IORD(AVALON_MM_SQRT_BASE, 0));	// wait
+		alt_printf("B%x\n", i);
+		fix16_t len = IORD(AVALON_MM_SQRT_BASE, 1);
+		alt_printf("C%x\n", i);
+
+
+		fix16_t x_norm = ALT_CI_CI_DIV(0,x,len);	
+		alt_printf("D%x\n", i);
+		fix16_t y_norm = ALT_CI_CI_DIV(0,y,len);
+		alt_printf("E%x\n", i);
+		fix16_t z_norm = ALT_CI_CI_DIV(0,z,len);
+		alt_printf("F%x\n", i);
+								
+		alt_printf("DIV_WRITE #### %x ####\n" , ALT_CI_CI_DIV(1,x_norm,len));
+		alt_printf("G%x\n", i);
+		alt_printf("DIV_WRITE #### %x ####\n" , ALT_CI_CI_DIV(1,y_norm,len));
+		alt_printf("H%x\n", i);
+		alt_printf("DIV_WRITE #### %x ####\n" , ALT_CI_CI_DIV(1,z_norm,len));
+	}*/
+	
 	//alt_printf("DIV_WRITE #### %x ####\n" , ALT_CI_CI_DIV(0x0, 0x000a0000, 0x00050000));
 	
 	//alt_printf("DIV_READ #### %x ####\n" , ALT_CI_CI_DIV(0x1, 0, 0));
@@ -120,7 +156,7 @@ void run()
 	alt_printf("\n");
 	alt_printf(ALT_CI_CI_DIV_N);
 	alt_printf("\n");
-	alt_printf(ALT_CI_CI_DIV_N_MASK & ALT_CI_CI_DIV_N);*/
+	alt_printf(ALT_CI_CI_DIV_N_MASK & ALT_CI_CI_DIV_N);
 	//alt_printf("MUL: #### %x ####\n" , ALT_CI_CI_MUL(0x00090000,0x00010000));
 	
 	
@@ -137,7 +173,7 @@ void run()
 	alt_printf("SQRT: #### %x ####\n", IORD(AVALON_MM_SQRT_BASE, 1));
 	
 	while(IORD(AVALON_MM_SQRT_BASE, 0));
-	alt_printf("SQRT: #### %x ####\n", IORD(AVALON_MM_SQRT_BASE, 1));
+	alt_printf("SQRT: #### %x ####\n", IORD(AVALON_MM_SQRT_BASE, 1));*/
 	
 	//alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,0x00090000,0x00030000));
 /*
@@ -154,6 +190,15 @@ void run()
 	alt_printf(" done\n\n");
 	alt_printf("read result from sqrt module:");
 	alt_printf("#### %x #### done.", IORD(AVALON_MM_SQRT_BASE, 1));*/
+	alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,0xFFFFFFFF,0xFFFFFFFF));
+	alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,0x12345678,0x12345678));
+	alt_printf("#### %x #### done.", ALT_CI_CI_DIV(1,0,0));
+	alt_printf("#### %x #### done.", ALT_CI_CI_DIV(1,0,0));
+	
+	alt_printf("1 #### %x ####\n" , ALT_CI_CI_DIV(0,0xFFFFFFFF,0xFFFFFFFF));
+	alt_printf("2 #### %x ####\n" , ALT_CI_CI_DIV(0,0x12345678,0x12345678));
+	alt_printf("4 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));
+	alt_printf("5 #### %x ####\n" , ALT_CI_CI_DIV(1,0,0));
 	
 	char line_buffer[16];
 
